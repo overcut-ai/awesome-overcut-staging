@@ -6,6 +6,7 @@ import "./login.scss";
 const KNOWN_LOGIN_ERROR_MESSAGES = new Set([
   "Invalid username or password",
   "Unable to log in. Please check your credentials.",
+  "Login failed due to an unexpected server response.",
 ]);
 
 const getSafeLoginErrorMessage = (error: unknown) => {

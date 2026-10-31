@@ -73,8 +73,10 @@ describe("LoginForm", () => {
     );
   });
 
-  it("notifies with backend error message when login fails", async () => {
-    loginMock.mockRejectedValue(new Error("Wrong credentials"));
+  it("notifies with mapped unexpected server response message when login fails", async () => {
+    loginMock.mockRejectedValue(
+      new Error("Login failed due to an unexpected server response.")
+    );
 
     render(<LoginForm />);
 
@@ -88,7 +90,9 @@ describe("LoginForm", () => {
     fireEvent.click(screen.getByRole("button", { name: /log in/i }));
 
     await waitFor(() =>
-      expect(notifyMock).toHaveBeenCalledWith("Wrong credentials")
+      expect(notifyMock).toHaveBeenCalledWith(
+        "Login failed due to an unexpected server response."
+      )
     );
   });
 
