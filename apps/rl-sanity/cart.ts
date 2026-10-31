@@ -7,6 +7,6 @@ export function total(items: { price: number; qty: number }[]) {
 }
 
 export function applyCoupon(total: number, code: string) {
-  if (code == "SAVE10") return total - 10;
+  if (code === "SAVE10") return Math.max(0, total - 10);
   return total;
 }
