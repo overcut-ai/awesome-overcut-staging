@@ -1,5 +1,5 @@
 export function greet(name: string) {
-  return "hi " + name;
+  return `hi ${name}`;
 }
 
 export function shout(text: string) {
