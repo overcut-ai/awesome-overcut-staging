@@ -1,20 +1,23 @@
-export function retry<T>(
-  operation: () => T,
+const sleep = (delayMs: number): Promise<void> =>
+  new Promise((resolve) => {
+    setTimeout(resolve, delayMs);
+  });
+
+export async function retry<T>(
+  operation: () => T | Promise<T>,
   maxAttempts: number,
   delayMs: number,
-): T {
+): Promise<T> {
   let attempt = 0;
   while (attempt < maxAttempts) {
     try {
-      return operation();
+      return await operation();
     } catch (error) {
       attempt += 1;
       if (attempt >= maxAttempts) {
         throw error;
       }
-      const start = Date.now();
-      while (Date.now() - start < delayMs) {
-      }
+      await sleep(delayMs);
     }
   }
   throw new Error("Retry attempts exhausted");
