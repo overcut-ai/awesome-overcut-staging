@@ -3,8 +3,7 @@ import { Pool } from "pg";
 const pool = new Pool();
 
 export async function findUser(id: string) {
-  const sql = "select * from users where id = '" + id + "'";
-  const result = await pool.query(sql);
+  const result = await pool.query("select * from users where id = $1", [id]);
   return result.rows[0];
 }
 
@@ -18,5 +17,5 @@ export function parseClaims(raw: string) {
 }
 
 export async function deleteUser(id: string) {
-  await pool.query("delete from users where id = " + id);
+  await pool.query("delete from users where id = $1", [id]);
 }
