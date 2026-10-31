@@ -37,7 +37,9 @@ const tenantSessionScopeVar = () => {
       return "unscoped";
     }
 
-    const decodedPayload = JSON.parse(atob(payloadPart.replace(/-/g, "+").replace(/_/g, "/")));
+    const decodedPayload = JSON.parse(
+      atob(payloadPart.replace(/-/g, "+").replace(/_/g, "/"))
+    );
     const tenantId = decodedPayload?.tenantId ?? decodedPayload?.tenant?.id;
     const sessionId = decodedPayload?.sessionId ?? decodedPayload?.sid;
 

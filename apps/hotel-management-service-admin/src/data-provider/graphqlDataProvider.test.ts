@@ -1,7 +1,9 @@
 import { CREDENTIALS_LOCAL_STORAGE_ITEM } from "../constants";
 
 const createJwtToken = (payload: Record<string, unknown>) => {
-  const encodedPayload = Buffer.from(JSON.stringify(payload)).toString("base64url");
+  const encodedPayload = Buffer.from(JSON.stringify(payload)).toString(
+    "base64url"
+  );
   return `header.${encodedPayload}.signature`;
 };
 
@@ -17,41 +19,53 @@ describe("apollo cache tenant/session scoped identity", () => {
 
   const getDataIdFromObject = async () => {
     const { apolloClient } = await import("./graphqlDataProvider");
-    return (apolloClient.cache as any).config.dataIdFromObject as (obj: any) => string | undefined;
+    return (apolloClient.cache as any).config.dataIdFromObject as (
+      obj: any
+    ) => string | undefined;
   };
 
   it("generates scoped cache id using tenantId + sessionId", async () => {
     setToken({ tenantId: "tenant-a", sessionId: "session-1" });
     const dataIdFromObject = await getDataIdFromObject();
 
-    expect(dataIdFromObject({ __typename: "Hotel", id: "42" })).toBe("tenant-a:session-1:Hotel:42");
+    expect(dataIdFromObject({ __typename: "Hotel", id: "42" })).toBe(
+      "tenant-a:session-1:Hotel:42"
+    );
   });
 
   it("falls back to sid when sessionId is not present", async () => {
     setToken({ tenantId: "tenant-a", sid: "sid-1" });
     const dataIdFromObject = await getDataIdFromObject();
 
-    expect(dataIdFromObject({ __typename: "Reservation", id: 7 })).toBe("tenant-a:sid-1:Reservation:7");
+    expect(dataIdFromObject({ __typename: "Reservation", id: 7 })).toBe(
+      "tenant-a:sid-1:Reservation:7"
+    );
   });
 
   it("falls back to nested tenant.id when tenantId is not present", async () => {
     setToken({ tenant: { id: "tenant-nested" }, sessionId: "session-2" });
     const dataIdFromObject = await getDataIdFromObject();
 
-    expect(dataIdFromObject({ __typename: "Room", id: "100" })).toBe("tenant-nested:session-2:Room:100");
+    expect(dataIdFromObject({ __typename: "Room", id: "100" })).toBe(
+      "tenant-nested:session-2:Room:100"
+    );
   });
 
   it("fails closed when token is missing", async () => {
     const dataIdFromObject = await getDataIdFromObject();
 
-    expect(dataIdFromObject({ __typename: "Customer", id: "1" })).toBeUndefined();
+    expect(
+      dataIdFromObject({ __typename: "Customer", id: "1" })
+    ).toBeUndefined();
   });
 
   it("fails closed when token is malformed", async () => {
     localStorage.setItem(CREDENTIALS_LOCAL_STORAGE_ITEM, "not-a-jwt");
     const dataIdFromObject = await getDataIdFromObject();
 
-    expect(dataIdFromObject({ __typename: "Customer", id: "1" })).toBeUndefined();
+    expect(
+      dataIdFromObject({ __typename: "Customer", id: "1" })
+    ).toBeUndefined();
   });
 
   it("fails closed when tenant is missing", async () => {
