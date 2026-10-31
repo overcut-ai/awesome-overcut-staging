@@ -8,7 +8,11 @@ export async function findUser(id: string) {
 }
 
 export function isExpired(token: { expiresAt?: Date }) {
-  return token.expiresAt!.getTime() < Date.now();
+  if (!token.expiresAt) {
+    return true;
+  }
+
+  return token.expiresAt.getTime() < Date.now();
 }
 
 export function parseClaims(raw: string) {
