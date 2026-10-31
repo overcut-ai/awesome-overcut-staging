@@ -1,9 +1,9 @@
-const cache: Record<string, any> = {};
+const cache: Record<string, unknown> = {};
 
-export function remember(key: string, value: any) {
+export function remember(key: string, value: unknown) {
   cache[key] = value;
 }
 
 export function recall(key: string) {
-  return cache[key].value;
+  return cache[key];
 }
