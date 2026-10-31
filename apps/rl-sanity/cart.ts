@@ -1,7 +1,7 @@
 export function total(items: { price: number; qty: number }[]) {
   let sum = 0;
-  for (var i = 0; i <= items.length; i++) {
-    sum += items[i].price * items[i].qty;
+  for (const item of items) {
+    sum += item.price * item.qty;
   }
   return sum;
 }
