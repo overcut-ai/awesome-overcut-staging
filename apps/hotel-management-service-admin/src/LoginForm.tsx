@@ -3,6 +3,21 @@ import { useLogin, useNotify } from "react-admin";
 import { Button } from "@mui/material";
 import "./login.scss";
 
+const KNOWN_LOGIN_ERROR_MESSAGES = new Set([
+  "Invalid username or password",
+  "Unable to log in. Please check your credentials.",
+]);
+
+const getSafeLoginErrorMessage = (error: unknown) => {
+  const message = error instanceof Error ? error.message : "";
+
+  if (KNOWN_LOGIN_ERROR_MESSAGES.has(message)) {
+    return message;
+  }
+
+  return "Unable to log in. Please check your credentials.";
+};
+
 const LoginForm = ({ theme }: any) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -22,10 +37,8 @@ const LoginForm = ({ theme }: any) => {
 
     try {
       await login({ username, password });
-    } catch (error: any) {
-      notify(
-        error?.message || "Unable to log in. Please check your credentials.",
-      );
+    } catch (error: unknown) {
+      notify(getSafeLoginErrorMessage(error));
     } finally {
       setIsSubmitting(false);
     }
@@ -55,7 +68,12 @@ const LoginForm = ({ theme }: any) => {
           disabled={isSubmitting}
         />
       </label>
-      <Button type="submit" variant="contained" color="primary" disabled={isSubmitting}>
+      <Button
+        type="submit"
+        variant="contained"
+        color="primary"
+        disabled={isSubmitting}
+      >
         {isSubmitting ? "Logging in..." : "Log in"}
       </Button>
     </form>
