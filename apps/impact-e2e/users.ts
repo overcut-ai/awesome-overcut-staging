@@ -16,8 +16,18 @@ export function isExpired(token: { expiresAt?: Date }) {
 }
 
 export function parseClaims(raw: string) {
-  const tmp = JSON.parse(Buffer.from(raw.split(".")[1], "base64").toString());
-  return tmp;
+  const parts = raw.split(".");
+
+  if (parts.length < 2 || !parts[1]) {
+    throw new Error("Malformed token: expected JWT with payload segment");
+  }
+
+  try {
+    const decodedPayload = Buffer.from(parts[1], "base64").toString();
+    return JSON.parse(decodedPayload);
+  } catch {
+    throw new Error("Malformed token claims: unable to decode or parse payload JSON");
+  }
 }
 
 export async function deleteUser(id: string) {
