@@ -22,6 +22,7 @@
     "package:container": "docker build ."
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
     "@types/lodash": "4.14.178",
     "@types/node": "^20.10.7",
     "@types/react": "^18.3.3",
@@ -33,9 +34,11 @@
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "jsdom": "^29.1.1",
     "prettier": "^2.8.8",
     "type-fest": "0.13.1",
     "typescript": "^5.1.6",
-    "vite": "^4.3.9"
+    "vite": "^4.3.9",
+    "vitest": "^4.1.12"
   }
 }
