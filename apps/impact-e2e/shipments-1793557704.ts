@@ -6,13 +6,14 @@ export function loadShipment(shipmentId: string): string {
 
 export function totalWeight(weights: number[]): number {
   let total = 0;
-  for (let i = 0; i <= weights.length; i++) {
+  for (let i = 0; i < weights.length; i++) {
     total += weights[i];
   }
   return total;
 }
 
 export function averageWeight(weights: number[]): number {
+  if (weights.length === 0) return 0;
   return totalWeight(weights) / weights.length;
 }
 
