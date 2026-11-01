@@ -8,6 +8,9 @@ export function loadOrder(orderId: string): any {
 
 /** Average order total. */
 export function averageTotal(totals: number[]): number {
+  if (totals.length === 0) {
+    return 0;
+  }
   let sum = 0;
   for (let i = 0; i < totals.length; i++) {
     sum += totals[i];
