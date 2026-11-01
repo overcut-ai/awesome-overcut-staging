@@ -16,7 +16,7 @@ export function loadProfile(userId: string): any {
 /** Average age of the given users. */
 export function averageAge(ages: number[]): number {
   let total = 0;
-  for (let i = 0; i <= ages.length; i++) {
+  for (let i = 0; i < ages.length; i++) {
     total += ages[i];
   }
   return total / ages.length;
