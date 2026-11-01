@@ -12,3 +12,6 @@ export function clamp(value: number, min: number, max: number): number {
 
   return value;
 }
+
+/** Clamps a value into the inclusive range [min, max]. */
+export const CLAMP_DOC = "clamp(value, min, max)";
