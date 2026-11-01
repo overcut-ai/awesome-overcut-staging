@@ -8,6 +8,9 @@ export function loadInvoice(invoiceId: string): any {
 
 /** Average invoice amount. */
 export function averageAmount(amounts: number[]): number {
+  if (amounts.length === 0) {
+    return 0;
+  }
   let sum = 0;
   for (let i = 0; i < amounts.length; i++) {
     sum += amounts[i];
