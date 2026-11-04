@@ -18,25 +18,37 @@ const LOGIN = gql`
 
 export const jwtAuthProvider: AuthProvider = {
   login: async (credentials: Credentials) => {
-    const userData = await apolloClient.mutate<LoginMutateResult>({
-      mutation: LOGIN,
-      variables: {
-        ...credentials,
-      },
-    });
+    let userData: LoginMutateResult | null | undefined;
 
-    if (userData && userData.data?.login.username) {
-      localStorage.setItem(
-        CREDENTIALS_LOCAL_STORAGE_ITEM,
-        createBearerAuthorizationHeader(userData.data.login?.accessToken)
+    try {
+      const response = await apolloClient.mutate<LoginMutateResult>({
+        mutation: LOGIN,
+        variables: {
+          ...credentials,
+        },
+      });
+      userData = response.data;
+    } catch {
+      throw new Error(
+        "Login failed. Please check your credentials and try again."
       );
-      localStorage.setItem(
-        USER_DATA_LOCAL_STORAGE_ITEM,
-        JSON.stringify(userData.data)
-      );
-      return Promise.resolve();
     }
-    return Promise.reject();
+
+    const username = userData?.login?.username;
+    const accessToken = userData?.login?.accessToken;
+
+    if (!username || !accessToken) {
+      throw new Error(
+        "Login failed due to an unexpected server response. Please try again."
+      );
+    }
+
+    localStorage.setItem(
+      CREDENTIALS_LOCAL_STORAGE_ITEM,
+      createBearerAuthorizationHeader(accessToken)
+    );
+    localStorage.setItem(USER_DATA_LOCAL_STORAGE_ITEM, JSON.stringify(userData));
+    return Promise.resolve();
   },
   logout: () => {
     localStorage.removeItem(CREDENTIALS_LOCAL_STORAGE_ITEM);
