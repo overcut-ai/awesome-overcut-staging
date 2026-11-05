@@ -2,7 +2,11 @@
 const CODES = { SAVE10: 10, SAVE25: 25, HALF: 50 };
 
 function applyDiscount(total, code) {
-  const pct = CODES[code.toUpperCase()];
+  const normalizedCode = typeof code === 'string' ? code.toUpperCase() : '';
+  const pct = CODES[normalizedCode];
+
+  if (pct === undefined) return total;
+
   return total - total * pct / 100;
 }
 
