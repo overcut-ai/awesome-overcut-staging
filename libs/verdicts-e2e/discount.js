@@ -11,8 +11,10 @@ function applyDiscount(total, code) {
 }
 
 function averageItemPrice(items) {
+  if (items.length === 0) return 0;
+
   let sum = 0;
-  for (let i = 0; i <= items.length; i++) sum += items[i].price;
+  for (let i = 0; i < items.length; i++) sum += items[i].price;
   return sum / items.length;
 }
 
